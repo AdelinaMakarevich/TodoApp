@@ -1,40 +1,40 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
+import React from 'react'
+import { createRoot } from 'react-dom/client'
 
-import SearchPanel from './components/search-panel';
-import TodoList from './components/todo-list';
-import ItemStatusFilter from './components/item-status-filter';
+import SearchPanel from './components/search-panel'
+import TodoList from './components/todo-list'
+import ItemStatusFilter from './components/item-status-filter'
 
-import './index.css';
+import './index.css'
 
 export default class App extends React.Component {
   constructor() {
-    super();
+    super()
     this.filterTodos = (value) => {
-      let items = [...document.querySelectorAll('.todo-list-item')];
+      let items = [...document.querySelectorAll('.todo-list-item')]
 
       switch (value) {
         case 'all':
           items.forEach((todo) => {
-            todo.style.display = '';
-          });
-          break;
+            todo.style.display = ''
+          })
+          break
 
         case 'active':
-          items.forEach((todo) => (todo.style.display = ''));
+          items.forEach((todo) => (todo.style.display = ''))
           items
             .filter((todo) => todo.querySelector('.description').classList == 'description done')
-            .forEach((todo) => (todo.style.display = 'none'));
-          break;
+            .forEach((todo) => (todo.style.display = 'none'))
+          break
 
         case 'completed':
-          items.forEach((todo) => (todo.style.display = ''));
+          items.forEach((todo) => (todo.style.display = ''))
           items
             .filter((todo) => todo.querySelector('.description').classList == 'description')
-            .forEach((todo) => (todo.style.display = 'none'));
-          break;
+            .forEach((todo) => (todo.style.display = 'none'))
+          break
       }
-    };
+    }
     this.state = {
       todoData: [
         {
@@ -56,67 +56,67 @@ export default class App extends React.Component {
           date: new Date(2023, 7, 26, 19, 59, 15),
         },
       ],
-    };
+    }
     this.newTask = (value) => {
       this.setState(({ todoData }) => {
-        let id = todoData.at(-1).id + 1;
-        let now = new Date();
+        let id = todoData.at(-1).id + 1
+        let now = new Date()
         let task = {
           label: value,
           done: false,
           id: id,
           date: now,
-        };
-        let newTodoData = [...todoData, task];
-        return { todoData: newTodoData };
-      });
-    };
+        }
+        let newTodoData = [...todoData, task]
+        return { todoData: newTodoData }
+      })
+    }
 
     this.doneTask = (id) => {
       this.setState(({ todoData }) => {
-        let index = todoData.findIndex((e) => e.id === id);
-        let deal = todoData[index];
-        deal.done = !deal.done;
-        let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)];
-        return { todoData: newTodoData };
-      });
-    };
+        let index = todoData.findIndex((e) => e.id === id)
+        let deal = todoData[index]
+        deal.done = !deal.done
+        let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
+        return { todoData: newTodoData }
+      })
+    }
 
     this.deletedItem = (id) => {
       if (id === 'done') {
         this.setState(({ todoData }) => {
-          const newTodoData = todoData.filter((data) => !data.done);
+          const newTodoData = todoData.filter((data) => !data.done)
 
           return {
             todoData: newTodoData,
-          };
-        });
+          }
+        })
       } else {
         this.setState(({ todoData }) => {
-          const index = todoData.findIndex((e) => e.id === id);
-          let newTodoData = [...todoData.slice(0, index), ...todoData.slice(index + 1)];
+          const index = todoData.findIndex((e) => e.id === id)
+          let newTodoData = [...todoData.slice(0, index), ...todoData.slice(index + 1)]
 
           return {
             todoData: newTodoData,
-          };
-        });
+          }
+        })
       }
-    };
+    }
 
     this.editItemPanel = (value) => {
-      let input = document.createElement('input');
-      input.value = value.querySelector('.description').textContent;
-      input.className = 'edit';
+      let input = document.createElement('input')
+      input.value = value.querySelector('.description').textContent
+      input.className = 'edit'
       input.onkeyup = function (event) {
         if (event.keyCode == 13) {
-          value.querySelector('.description').textContent = input.value;
-          input.remove();
-          value.classList.toggle('view');
+          value.querySelector('.description').textContent = input.value
+          input.remove()
+          value.classList.toggle('view')
         }
-      };
-      value.after(input);
-      value.classList.toggle('view');
-    };
+      }
+      value.after(input)
+      value.classList.toggle('view')
+    }
   }
 
   render() {
@@ -136,8 +136,8 @@ export default class App extends React.Component {
         </section>
         <ItemStatusFilter todos={this.state.todoData} dataFilter={this.filterTodos} onDeleted={this.deletedItem} />
       </section>
-    );
+    )
   }
 }
 
-createRoot(document.getElementById('root')).render(<App />);
+createRoot(document.getElementById('root')).render(<App />)

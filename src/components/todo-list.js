@@ -1,12 +1,12 @@
-import React from 'react';
+import React from 'react'
 
-import './todo-list.css';
+import './todo-list.css'
 
-import TodoListItem from './todo-list-item';
+import TodoListItem from './todo-list-item'
 
 const TodoList = ({ todos, onDone, onDeleted, onEdition }) => {
   const element = todos.map((item) => {
-    const { id, ...itemProps } = item;
+    const { id, ...itemProps } = item
 
     return (
       <li key={id}>
@@ -17,9 +17,9 @@ const TodoList = ({ todos, onDone, onDeleted, onEdition }) => {
           onEdition={(value) => onEdition(value)}
         />
       </li>
-    );
-  });
-  return <ul className="todo-list">{element}</ul>;
-};
+    )
+  })
+  return <ul className="todo-list">{element}</ul>
+}
 
-export default TodoList;
+export default TodoList

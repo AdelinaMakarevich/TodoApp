@@ -1,16 +1,16 @@
-import React from 'react';
+import React from 'react'
 
-import './item-status-filter.css';
+import './item-status-filter.css'
 
 class ItemStatusFilter extends React.Component {
   constructor() {
-    super();
+    super()
     this.filter = (value) => {
-      this.props.dataFilter(value);
-    };
+      this.props.dataFilter(value)
+    }
     this.delete = () => {
-      this.props.onDeleted('done');
-    };
+      this.props.onDeleted('done')
+    }
   }
   render() {
     return (
@@ -19,8 +19,8 @@ class ItemStatusFilter extends React.Component {
           tasks not completed:{' '}
           {this.props.todos.reduce((accumulator, currentValue) => {
             if (currentValue.done == false) {
-              return accumulator + 1;
-            } else return accumulator;
+              return accumulator + 1
+            } else return accumulator
           }, 0)}
         </span>
         <ul className="filters">
@@ -44,8 +44,8 @@ class ItemStatusFilter extends React.Component {
           Clear completed
         </button>
       </footer>
-    );
+    )
   }
 }
 
-export default ItemStatusFilter;
+export default ItemStatusFilter
