@@ -1,6 +1,7 @@
-import React from "react";
+import React from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import "./todo-list-item.css";
+
+import './todo-list-item.css';
 
 class TodoListItem extends React.Component {
   constructor() {
@@ -9,22 +10,18 @@ class TodoListItem extends React.Component {
       this.props.onDone();
     };
     this.itemCheck = (event) => {
-      this.props.onEdition(event.target.closest('div'))
-    }
+      this.props.onEdition(event.target.closest('div'));
+    };
     this.timeCounter = () => {
-      return (
-        formatDistanceToNow(
-          this.props.date
-        )
-      )
-    }
+      return formatDistanceToNow(this.props.date);
+    };
   }
   render() {
     const { label, done, onDeleted } = this.props;
 
-    let classNames = "description";
+    let classNames = 'description';
     if (done) {
-      classNames += " done";
+      classNames += 'done';
     }
 
     return (
