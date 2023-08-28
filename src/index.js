@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import SearchPanel from './components/search-panel';
 import TodoList from './components/todo-list';
@@ -35,91 +35,89 @@ export default class App extends React.Component {
           break;
       }
     };
-  }
-
-  state = {
-    todoData: [
-      {
-        label: 'задача 1',
-        done: false,
-        id: 1,
-        date: new Date(2023, 0, 1, 0, 0, 15),
-      },
-      {
-        label: 'задача 2',
-        done: false,
-        id: 2,
-        date: new Date(2023, 5, 1, 0, 0, 15),
-      },
-      {
-        label: 'задача 3',
-        done: false,
-        id: 3,
-        date: new Date(2023, 7, 26, 19, 59, 15),
-      },
-    ],
-  };
-
-  newTask = (value) => {
-    this.setState(({ todoData }) => {
-      let id = todoData.at(-1).id + 1;
-      let now = new Date();
-      let task = {
-        label: value,
-        done: false,
-        id: id,
-        date: now,
-      };
-      let newTodoData = [...todoData, task];
-      return { todoData: newTodoData };
-    });
-  };
-
-  doneTask = (id) => {
-    this.setState(({ todoData }) => {
-      let index = todoData.findIndex((e) => e.id === id);
-      let deal = todoData[index];
-      deal.done = !deal.done;
-      let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)];
-      return { todoData: newTodoData };
-    });
-  };
-
-  deletedItem = (id) => {
-    if (id === 'done') {
+    this.state = {
+      todoData: [
+        {
+          label: 'задача 1',
+          done: false,
+          id: 1,
+          date: new Date(2023, 0, 1, 0, 0, 15),
+        },
+        {
+          label: 'задача 2',
+          done: false,
+          id: 2,
+          date: new Date(2023, 5, 1, 0, 0, 15),
+        },
+        {
+          label: 'задача 3',
+          done: false,
+          id: 3,
+          date: new Date(2023, 7, 26, 19, 59, 15),
+        },
+      ],
+    };
+    this.newTask = (value) => {
       this.setState(({ todoData }) => {
-        const newTodoData = todoData.filter((data) => !data.done);
-
-        return {
-          todoData: newTodoData,
+        let id = todoData.at(-1).id + 1;
+        let now = new Date();
+        let task = {
+          label: value,
+          done: false,
+          id: id,
+          date: now,
         };
+        let newTodoData = [...todoData, task];
+        return { todoData: newTodoData };
       });
-    } else {
+    };
+
+    this.doneTask = (id) => {
       this.setState(({ todoData }) => {
-        const index = todoData.findIndex((e) => e.id === id);
-        let newTodoData = [...todoData.slice(0, index), ...todoData.slice(index + 1)];
-
-        return {
-          todoData: newTodoData,
-        };
+        let index = todoData.findIndex((e) => e.id === id);
+        let deal = todoData[index];
+        deal.done = !deal.done;
+        let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)];
+        return { todoData: newTodoData };
       });
-    }
-  };
+    };
 
-  editItemPanel = (value) => {
-    let input = document.createElement('input');
-    input.value = value.querySelector('.description').textContent;
-    input.className = 'edit';
-    input.onkeyup = function (event) {
-      if (event.keyCode == 13) {
-        value.querySelector('.description').textContent = input.value;
-        input.remove();
-        value.classList.toggle('view');
+    this.deletedItem = (id) => {
+      if (id === 'done') {
+        this.setState(({ todoData }) => {
+          const newTodoData = todoData.filter((data) => !data.done);
+
+          return {
+            todoData: newTodoData,
+          };
+        });
+      } else {
+        this.setState(({ todoData }) => {
+          const index = todoData.findIndex((e) => e.id === id);
+          let newTodoData = [...todoData.slice(0, index), ...todoData.slice(index + 1)];
+
+          return {
+            todoData: newTodoData,
+          };
+        });
       }
     };
-    value.after(input);
-    value.classList.toggle('view');
-  };
+
+    this.editItemPanel = (value) => {
+      let input = document.createElement('input');
+      input.value = value.querySelector('.description').textContent;
+      input.className = 'edit';
+      input.onkeyup = function (event) {
+        if (event.keyCode == 13) {
+          value.querySelector('.description').textContent = input.value;
+          input.remove();
+          value.classList.toggle('view');
+        }
+      };
+      value.after(input);
+      value.classList.toggle('view');
+    };
+  }
 
   render() {
     return (
@@ -142,4 +140,4 @@ export default class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+createRoot(document.getElementById('root')).render(<App />);
