@@ -1,7 +1,7 @@
 import React from 'react'
 import { formatDistanceToNow } from 'date-fns'
 
-import './todo-list-item.css'
+import './TodoListItem.scss'
 
 class TodoListItem extends React.Component {
   constructor() {

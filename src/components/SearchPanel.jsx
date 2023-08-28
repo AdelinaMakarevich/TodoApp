@@ -1,6 +1,6 @@
 import React from 'react'
 
-import './search-panel.css'
+import './SearchPanel.scss'
 
 class SearchPanel extends React.Component {
   constructor() {
@@ -18,4 +18,5 @@ class SearchPanel extends React.Component {
     )
   }
 }
+
 export default SearchPanel

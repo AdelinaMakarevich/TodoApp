@@ -1,6 +1,6 @@
 import React from 'react'
 
-import './item-status-filter.css'
+import './ItemStatusFilter.scss'
 
 class ItemStatusFilter extends React.Component {
   constructor() {

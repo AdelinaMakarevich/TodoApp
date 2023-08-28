@@ -12,14 +12,14 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "main": "src/index.js",
+  "main": "src/index.jsx",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint --debug src/",
-    "lint:fix": "eslint --debug src/ --fix",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
     "format": "prettier --write src/**/*.js"
   },
   "husky": {

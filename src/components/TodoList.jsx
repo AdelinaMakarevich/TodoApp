@@ -1,8 +1,8 @@
 import React from 'react'
 
-import './todo-list.css'
+import './TodoList.scss'
 
-import TodoListItem from './todo-list-item'
+import TodoListItem from './TodoListItem'
 
 const TodoList = ({ todos, onDone, onDeleted, onEdition }) => {
   const element = todos.map((item) => {

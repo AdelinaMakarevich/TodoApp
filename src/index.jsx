@@ -1,11 +1,11 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 
-import SearchPanel from './components/search-panel'
-import TodoList from './components/todo-list'
-import ItemStatusFilter from './components/item-status-filter'
+import SearchPanel from './components/SearchPanel'
+import TodoList from './components/TodoList'
+import ItemStatusFilter from './components/ItemStatusFilter'
 
-import './index.css'
+import './index.scss'
 
 export default class App extends React.Component {
   constructor() {
