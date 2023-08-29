@@ -6,7 +6,7 @@ class SearchPanel extends React.Component {
   constructor() {
     super()
     this.keyCheck = (event) => {
-      if (event.keyCode == 13) {
+      if (event.keyCode == 13 && event.target.value != 0 && event.target.value != /^\s+$/) {
         this.props.onAddition(event.target.value)
         event.target.value = ''
       }
@@ -14,7 +14,14 @@ class SearchPanel extends React.Component {
   }
   render() {
     return (
-      <input type="text" className="new-todo" placeholder="What needs to be done?" autoFocus onKeyUp={this.keyCheck} />
+      <input
+        type="text"
+        className="NewTodo"
+        placeholder="What needs to be done?"
+        autoFocus
+        onKeyUp={this.keyCheck}
+        required
+      />
     )
   }
 }

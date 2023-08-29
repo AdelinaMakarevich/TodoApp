@@ -19,20 +19,20 @@ class TodoListItem extends React.Component {
   render() {
     const { label, done, onDeleted } = this.props
 
-    let classNames = 'description'
+    let classNames = 'Description'
     if (done) {
-      classNames += 'done'
+      classNames += ' Done'
     }
 
     return (
-      <div className="todo-list-item">
-        <input className="toggle" type="checkbox" onClick={this.onLabelClick} />
-        <label>
+      <div className="TodoListItem">
+        <input onClick={this.onLabelClick} className="Toggle" type="checkbox" />
+        <label onClick={(event) => event.currentTarget.parentElement.querySelector('.Toggle').click()}>
           <span className={classNames}>{label}</span>
-          <span className="created">created {this.timeCounter()} ago</span>
+          <span className="Created">created {this.timeCounter()} ago</span>
         </label>
-        <button className="icon icon-edit" onClick={this.itemCheck}></button>
-        <button className="icon icon-destroy" onClick={onDeleted}></button>
+        <button type="button" className="Icon IconEdit" onClick={this.itemCheck}></button>
+        <button type="button" className="Icon IconDestroy" onClick={onDeleted}></button>
       </div>
     )
   }

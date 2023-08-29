@@ -2,7 +2,7 @@ import React from 'react'
 
 import './TodoList.scss'
 
-import TodoListItem from './TodoListItem'
+import TodoListItem from '../TodoListItem'
 
 const TodoList = ({ todos, onDone, onDeleted, onEdition }) => {
   const element = todos.map((item) => {
@@ -14,12 +14,12 @@ const TodoList = ({ todos, onDone, onDeleted, onEdition }) => {
           {...itemProps}
           onDeleted={() => onDeleted(id)}
           onDone={() => onDone(id)}
-          onEdition={(value) => onEdition(value)}
+          onEdition={(target) => onEdition(id, target)}
         />
       </li>
     )
   })
-  return <ul className="todo-list">{element}</ul>
+  return <ul className="TodoList">{element}</ul>
 }
 
 export default TodoList

@@ -14,8 +14,8 @@ class ItemStatusFilter extends React.Component {
   }
   render() {
     return (
-      <footer className="footer">
-        <span className="todo-count">
+      <footer className="Footer">
+        <span className="TodoCount">
           tasks not completed:{' '}
           {this.props.todos.reduce((accumulator, currentValue) => {
             if (currentValue.done == false) {
@@ -23,7 +23,7 @@ class ItemStatusFilter extends React.Component {
             } else return accumulator
           }, 0)}
         </span>
-        <ul className="filters">
+        <ul className="Filters">
           <li>
             <button type="button" onClick={() => this.filter('all')}>
               All
@@ -40,7 +40,7 @@ class ItemStatusFilter extends React.Component {
             </button>
           </li>
         </ul>
-        <button className="clear-completed" onClick={() => this.delete()}>
+        <button type="button" className="ClearCompleted" onClick={this.delete}>
           Clear completed
         </button>
       </footer>

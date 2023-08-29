@@ -1,17 +1,16 @@
-import React from 'react'
-import { createRoot } from 'react-dom/client'
+import React, { Component } from 'react'
 
 import SearchPanel from './components/SearchPanel'
 import TodoList from './components/TodoList'
 import ItemStatusFilter from './components/ItemStatusFilter'
 
-import './index.scss'
+import './App.scss'
 
-export default class App extends React.Component {
+class App extends Component {
   constructor() {
     super()
     this.filterTodos = (value) => {
-      let items = [...document.querySelectorAll('.todo-list-item')]
+      let items = [...document.querySelectorAll('.TodoListItem')]
 
       switch (value) {
         case 'all':
@@ -23,14 +22,14 @@ export default class App extends React.Component {
         case 'active':
           items.forEach((todo) => (todo.style.display = ''))
           items
-            .filter((todo) => todo.querySelector('.description').classList == 'description done')
+            .filter((todo) => todo.querySelector('.Description').classList == 'Description Done')
             .forEach((todo) => (todo.style.display = 'none'))
           break
 
         case 'completed':
           items.forEach((todo) => (todo.style.display = ''))
           items
-            .filter((todo) => todo.querySelector('.description').classList == 'description')
+            .filter((todo) => todo.querySelector('.Description').classList == 'Description')
             .forEach((todo) => (todo.style.display = 'none'))
           break
       }
@@ -77,6 +76,7 @@ export default class App extends React.Component {
         let index = todoData.findIndex((e) => e.id === id)
         let deal = todoData[index]
         deal.done = !deal.done
+        console.log(deal.done)
         let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
         return { todoData: newTodoData }
       })
@@ -103,30 +103,46 @@ export default class App extends React.Component {
       }
     }
 
-    this.editItemPanel = (value) => {
-      let input = document.createElement('input')
-      input.value = value.querySelector('.description').textContent
-      input.className = 'edit'
+    this.editItemPanel = (id, target) => {
+      const index = this.state.todoData.findIndex((e) => e.id === id)
+      const editItem = this.state.todoData[index]
+      const input = document.createElement('input')
+      input.value = editItem.label
+      input.className = 'Edit'
+      let context = this
       input.onkeyup = function (event) {
-        if (event.keyCode == 13) {
-          value.querySelector('.description').textContent = input.value
+        if (event.keyCode == 13 && event.target.value != 0 && event.target.value != /^\s+$/) {
+          editItem.label = input.value
+          editItem.date = new Date()
+          context.editItem(index, editItem)
           input.remove()
-          value.classList.toggle('view')
+          target.classList.toggle('View')
         }
       }
-      value.after(input)
-      value.classList.toggle('view')
+      console.log(target)
+      target.after(input)
+      target.classList.toggle('View')
+    }
+
+    this.editItem = (index, item) => {
+      this.setState(({ todoData }) => {
+        let newTodoData = [...todoData.slice(0, index), item, ...todoData.slice(index + 1)]
+
+        return {
+          todoData: newTodoData,
+        }
+      })
     }
   }
 
   render() {
     return (
-      <section className="todoapp">
-        <header className="header">
+      <section className="AppTodo">
+        <header className="AppHeader">
           <h1>todos</h1>
           <SearchPanel onAddition={this.newTask} />
         </header>
-        <section className="main">
+        <section className="AppMain">
           <TodoList
             todos={this.state.todoData}
             onDone={this.doneTask}
@@ -140,4 +156,4 @@ export default class App extends React.Component {
   }
 }
 
-createRoot(document.getElementById('root')).render(<App />)
+export default App

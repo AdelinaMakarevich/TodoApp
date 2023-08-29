@@ -1,20 +1,20 @@
-.editing {
+.Editing {
 	border-bottom: none;
 	padding: 0;
 }
 
-.editing .edit {
+.Editing .Edit {
 	display: block;
 	width: calc(100% - 43px);
 	padding: 12px 16px;
 	margin: 0 0 0 43px;
 }
 
-.editing .view {
+.Editing .View {
 	display: none;
 }
 
-.toggle {
+.Toggle {
 	text-align: center;
 	width: 40px;
 	/* auto, since non-WebKit browsers doesn't support input styling */
@@ -27,19 +27,16 @@
 	-webkit-appearance: none;
 	appearance: none;
 	cursor: pointer;
-}
-
-.toggle {
 	opacity: 0;
 }
 
-.toggle + label {
+.Toggle + label {
 	background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');
 	background-repeat: no-repeat;
 	background-position: center left;
 }
 
-.toggle:checked + label {
+.Toggle:checked + label {
 	background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E');
 }
 
@@ -51,12 +48,12 @@ label {
   margin: 0;
 }
 
-label .created {
+label .Created {
 	font-size: 13px;
 	color: gray;
 }
 
-label .description {
+label .Description {
 	word-break: break-all;
 	display: block;
 	line-height: 1.2;
@@ -65,7 +62,7 @@ label .description {
 	color: #4d4d4d;
 }
 
-.icon {
+.Icon {
 	position: absolute;
 	top: 0;
 	bottom: -3px;
@@ -78,36 +75,36 @@ label .description {
 	cursor: pointer;
 }
 
-.icon:hover {
+.Icon:hover {
 	color: #af5b5e;
 }
 
-.icon-destroy {
+.IconDestroy {
 	right: 10px;
 }
 
-.icon-destroy:after {
+.IconDestroy:after {
 	content: '×';
 }
 
-.icon-edit {
+.IconEdit {
 	font-size: 19px;
 	right: 45px;
 }
 
-.icon-edit:after {
+.IconEdit:after {
 	content: '✎';
 }
 
-.edit {
+.Edit {
 	display: none;
 }
 
-.editing:last-child {
+.Editing:last-child {
 	margin-bottom: -1px;
 }
 
-label .done {
+label .Done {
 	color: #cdcdcd;
     text-decoration:line-through;
 }

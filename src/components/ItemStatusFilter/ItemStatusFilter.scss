@@ -1,4 +1,4 @@
-.footer {
+.Footer {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -10,7 +10,7 @@
 	color: gray;
 }
 
-.footer:before {
+.Footer:before {
 	content: '';
 	position: absolute;
 	z-index: -1;
@@ -26,15 +26,15 @@
 	            0 17px 2px -6px rgba(0, 0, 0, 0.2);
 }
 
-.todo-count {
+.TodoCount {
 	text-align: left;
 }
 
-.todo-count strong {
+.TodoCount strong {
 	font-weight: 300;
 }
 
-.filters {
+.Filters {
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -42,12 +42,12 @@
 	left: 0;
 }
 
-.filters li {
+.Filters li {
 	display: inline;
 	cursor: default;
 }
 
-.filters li button {
+.Filters li button {
 	cursor: pointer;
 	display: inline-block;
 	color: inherit;
@@ -59,27 +59,27 @@
 }
 
 
-.filters li:hover button {
+.Filters li:hover button {
 	border-color: rgba(39, 29, 29, 0.1);
 }
 
-.filters li button.selected {
+.Filters li button.selected {
 	border-color: rgba(175, 47, 47, 0.2);
 }
 
-.clear-completed,
-html .clear-completed:active {
+.ClearCompleted,
+html .ClearCompleted:active {
 	position: relative;
 	line-height: 20px;
 	text-decoration: none;
 	cursor: pointer;
 }
 
-.clear-completed:hover {
+.ClearCompleted:hover {
 	text-decoration: underline;
 }
 
-.info {
+.Info {
 	margin: 65px auto 0;
 	color: #4d4d4d;
 	font-size: 11px;
@@ -87,26 +87,26 @@ html .clear-completed:active {
 	text-align: center;
 }
 
-.info p {
+.Info p {
 	line-height: 1;
 }
 
-.info a {
+.Info a {
 	color: inherit;
 	text-decoration: none;
 	font-weight: 400;
 }
 
-.info a:hover {
+.Info a:hover {
 	text-decoration: underline;
 }
 
 @media (max-width: 430px) {
-	.footer {
+	.Footer {
 		height: 50px;
 	}
 
-	.filters {
+	.Filters {
 		bottom: 10px;
 	}
 }
