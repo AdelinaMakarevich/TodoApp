@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, endDate, setCountdownEnded, setCountdown } from 'react'
+import { secondsToMilliseconds, minutesToMilliseconds, intervalToDuration, isBefore, formatDuration } from 'date-fns'
 
 import SearchPanel from './components/SearchPanel'
 import TodoList from './components/TodoList'
@@ -41,32 +42,36 @@ class App extends Component {
           done: false,
           id: 1,
           date: new Date(2023, 0, 1, 0, 0, 15),
+          timer: { min: 1, sec: 10 },
         },
         {
           label: 'задача 2',
           done: false,
           id: 2,
           date: new Date(2023, 5, 1, 0, 0, 15),
+          timer: { min: 0, sec: 0 },
         },
         {
           label: 'задача 3',
           done: false,
           id: 3,
           date: new Date(2023, 7, 26, 19, 59, 15),
+          timer: { min: 16, sec: 0 },
         },
       ],
     }
-    this.newTask = (value) => {
+    this.newTask = (task, min, sec) => {
       this.setState(({ todoData }) => {
         let id = todoData.at(-1).id + 1
         let now = new Date()
-        let task = {
-          label: value,
+        let newTask = {
+          label: task,
           done: false,
           id: id,
           date: now,
+          timer: { min: min, sec: sec },
         }
-        let newTodoData = [...todoData, task]
+        let newTodoData = [...todoData, newTask]
         return { todoData: newTodoData }
       })
     }
@@ -133,6 +138,24 @@ class App extends Component {
         }
       })
     }
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        const now = minutesToMilliseconds(this.state.min) + secondsToMilliseconds(this.state.sec)
+        const duration = intervalToDuration({ start: now, end: endDate })
+
+        if (isBefore(endDate, now)) {
+          setCountdownEnded(true)
+          clearInterval(interval)
+          console.log('hjj')
+        } else {
+          setCountdown(`${formatDuration(duration)}`)
+          console.log(duration)
+        }
+      }, 1000)
+
+      return () => clearInterval(interval)
+    }, [endDate])
   }
 
   render() {
