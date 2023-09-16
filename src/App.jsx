@@ -41,32 +41,36 @@ class App extends Component {
           done: false,
           id: 1,
           date: new Date(2023, 0, 1, 0, 0, 15),
+          timer: { min: 0, sec: 40 },
         },
         {
           label: 'задача 2',
           done: false,
           id: 2,
           date: new Date(2023, 5, 1, 0, 0, 15),
+          timer: { min: 2, sec: 10 },
         },
         {
           label: 'задача 3',
           done: false,
           id: 3,
           date: new Date(2023, 7, 26, 19, 59, 15),
+          timer: { min: 1, sec: 10 },
         },
       ],
     }
-    this.newTask = (value) => {
+    this.newTask = (task, min, sec) => {
       this.setState(({ todoData }) => {
         let id = todoData.at(-1).id + 1
         let now = new Date()
-        let task = {
-          label: value,
+        let newTask = {
+          label: task,
           done: false,
           id: id,
           date: now,
+          timer: { min: min, sec: sec },
         }
-        let newTodoData = [...todoData, task]
+        let newTodoData = [...todoData, newTask]
         return { todoData: newTodoData }
       })
     }
@@ -76,7 +80,6 @@ class App extends Component {
         let index = todoData.findIndex((e) => e.id === id)
         let deal = todoData[index]
         deal.done = !deal.done
-        console.log(deal.done)
         let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
         return { todoData: newTodoData }
       })
@@ -119,7 +122,6 @@ class App extends Component {
           target.classList.toggle('View')
         }
       }
-      console.log(target)
       target.after(input)
       target.classList.toggle('View')
     }
@@ -131,6 +133,16 @@ class App extends Component {
         return {
           todoData: newTodoData,
         }
+      })
+    }
+
+    this.timerComplited = (id) => {
+      this.setState(({ todoData }) => {
+        let index = todoData.findIndex((e) => e.id === id)
+        let deal = todoData[index]
+        deal.done = !deal.done
+        let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
+        return { todoData: newTodoData }
       })
     }
   }
@@ -148,6 +160,7 @@ class App extends Component {
             onDone={this.doneTask}
             onDeleted={this.deletedItem}
             onEdition={this.editItemPanel}
+            timerComplited={this.timerComplited}
           />
         </section>
         <ItemStatusFilter todos={this.state.todoData} dataFilter={this.filterTodos} onDeleted={this.deletedItem} />

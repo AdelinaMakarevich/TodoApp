@@ -1,6 +1,8 @@
 import React from 'react'
 import { formatDistanceToNow } from 'date-fns'
 
+import Timer from '../Timer/Timer'
+
 import './TodoListItem.scss'
 
 class TodoListItem extends React.Component {
@@ -13,11 +15,11 @@ class TodoListItem extends React.Component {
       this.props.onEdition(event.target.closest('div'))
     }
     this.timeCounter = () => {
-      return formatDistanceToNow(this.props.date)
+      return formatDistanceToNow(this.props.date, { addSuffix: true })
     }
   }
   render() {
-    const { label, done, onDeleted } = this.props
+    const { label, done, onDeleted, timerComplited } = this.props
 
     let classNames = 'Description'
     if (done) {
@@ -27,9 +29,14 @@ class TodoListItem extends React.Component {
     return (
       <div className="TodoListItem">
         <input onClick={this.onLabelClick} className="Toggle" type="checkbox" />
-        <label onClick={(event) => event.currentTarget.parentElement.querySelector('.Toggle').click()}>
-          <span className={classNames}>{label}</span>
-          <span className="Created">created {this.timeCounter()} ago</span>
+        <label>
+          <span
+            className={classNames}
+            onClick={(event) => event.currentTarget.parentElement.parentElement.querySelector('.Toggle').click()}
+          >
+            {label}
+          </span>
+          <Timer todo={this.props} timerComplited={timerComplited} />
         </label>
         <button type="button" className="Icon IconEdit" onClick={this.itemCheck}></button>
         <button type="button" className="Icon IconDestroy" onClick={onDeleted}></button>
