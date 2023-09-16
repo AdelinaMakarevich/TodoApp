@@ -1,6 +1,8 @@
 import React from 'react'
 import { formatDistanceToNow } from 'date-fns'
 
+import Timer from '../Timer/Timer'
+
 import './TodoListItem.scss'
 
 class TodoListItem extends React.Component {
@@ -17,7 +19,7 @@ class TodoListItem extends React.Component {
     }
   }
   render() {
-    const { label, done, onDeleted } = this.props
+    const { label, done, onDeleted, timerComplited } = this.props
 
     let classNames = 'Description'
     if (done) {
@@ -34,12 +36,7 @@ class TodoListItem extends React.Component {
           >
             {label}
           </span>
-          <span className="Description">
-            <button className="Icon IconPlay"></button>
-            <button className="Icon IconPause"></button>
-            <p className="Icon Time">hhhh</p>
-          </span>
-          <span className="Created">created {this.timeCounter()}</span>
+          <Timer todo={this.props} timerComplited={timerComplited} />
         </label>
         <button type="button" className="Icon IconEdit" onClick={this.itemCheck}></button>
         <button type="button" className="Icon IconDestroy" onClick={onDeleted}></button>

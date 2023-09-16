@@ -1,5 +1,4 @@
-import React, { Component, useEffect, endDate, setCountdownEnded, setCountdown } from 'react'
-import { secondsToMilliseconds, minutesToMilliseconds, intervalToDuration, isBefore, formatDuration } from 'date-fns'
+import React, { Component } from 'react'
 
 import SearchPanel from './components/SearchPanel'
 import TodoList from './components/TodoList'
@@ -42,21 +41,21 @@ class App extends Component {
           done: false,
           id: 1,
           date: new Date(2023, 0, 1, 0, 0, 15),
-          timer: { min: 1, sec: 10 },
+          timer: { min: 0, sec: 40 },
         },
         {
           label: 'задача 2',
           done: false,
           id: 2,
           date: new Date(2023, 5, 1, 0, 0, 15),
-          timer: { min: 0, sec: 0 },
+          timer: { min: 2, sec: 10 },
         },
         {
           label: 'задача 3',
           done: false,
           id: 3,
           date: new Date(2023, 7, 26, 19, 59, 15),
-          timer: { min: 16, sec: 0 },
+          timer: { min: 1, sec: 10 },
         },
       ],
     }
@@ -81,7 +80,6 @@ class App extends Component {
         let index = todoData.findIndex((e) => e.id === id)
         let deal = todoData[index]
         deal.done = !deal.done
-        console.log(deal.done)
         let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
         return { todoData: newTodoData }
       })
@@ -124,7 +122,6 @@ class App extends Component {
           target.classList.toggle('View')
         }
       }
-      console.log(target)
       target.after(input)
       target.classList.toggle('View')
     }
@@ -139,23 +136,15 @@ class App extends Component {
       })
     }
 
-    useEffect(() => {
-      const interval = setInterval(() => {
-        const now = minutesToMilliseconds(this.state.min) + secondsToMilliseconds(this.state.sec)
-        const duration = intervalToDuration({ start: now, end: endDate })
-
-        if (isBefore(endDate, now)) {
-          setCountdownEnded(true)
-          clearInterval(interval)
-          console.log('hjj')
-        } else {
-          setCountdown(`${formatDuration(duration)}`)
-          console.log(duration)
-        }
-      }, 1000)
-
-      return () => clearInterval(interval)
-    }, [endDate])
+    this.timerComplited = (id) => {
+      this.setState(({ todoData }) => {
+        let index = todoData.findIndex((e) => e.id === id)
+        let deal = todoData[index]
+        deal.done = !deal.done
+        let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
+        return { todoData: newTodoData }
+      })
+    }
   }
 
   render() {
@@ -171,6 +160,7 @@ class App extends Component {
             onDone={this.doneTask}
             onDeleted={this.deletedItem}
             onEdition={this.editItemPanel}
+            timerComplited={this.timerComplited}
           />
         </section>
         <ItemStatusFilter todos={this.state.todoData} dataFilter={this.filterTodos} onDeleted={this.deletedItem} />

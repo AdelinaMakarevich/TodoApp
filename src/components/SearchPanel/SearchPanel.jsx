@@ -14,7 +14,6 @@ class SearchPanel extends React.Component {
       this.setState({
         task: event.target.value,
       })
-      event.target.value = ''
     }
 
     this.getMin = (event) => {
@@ -24,20 +23,20 @@ class SearchPanel extends React.Component {
       })
     }
     this.getSec = (event) => {
-      this.props.getSec(event.target.value)
       this.setState({
         sec: event.target.value,
       })
     }
-    this.submit = () => {
+    this.submit = (event) => {
+      event.target.querySelector('.NewTodo').value = ''
+      event.preventDefault()
       this.props.onAddition(this.state.task, this.state.min, this.state.sec)
     }
   }
   render() {
     return (
-      <form onSubmit={this.submit} className="HeaderConteiner">
-        <label>
-          <input type="text" />
+      <form onSubmit={this.submit}>
+        <label className="HeaderConteiner">
           <input
             type="text"
             className="NewTodo"
@@ -65,7 +64,7 @@ class SearchPanel extends React.Component {
             onChange={this.getSec}
           />
         </label>
-        <input type="submit" value="Отправить" />
+        <input type="submit" style={{ display: 'none' }} />
       </form>
     )
   }
