@@ -11,7 +11,7 @@ const TodoList = ({ todos, onDone, onDeleted, onEdition, timerComplited }) => {
     return (
       <li key={id}>
         <TodoListItem
-          {...itemProps}
+          todos={{ ...itemProps }}
           onDeleted={(event) => onDeleted(id, event)}
           onDone={() => onDone(id)}
           onEdition={(target) => onEdition(id, target)}

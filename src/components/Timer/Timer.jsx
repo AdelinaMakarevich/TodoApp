@@ -1,77 +1,65 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import './Timer.scss'
 
-export default class Timer extends Component {
-  constructor() {
-    super()
-    this.state = {
-      taskMin: '',
-      taskSec: '',
-      startedTimer: false,
-      finished: false,
-    }
-    this.startTimer = () => {
-      const { startedTimer, finished } = this.state
-      if (startedTimer) {
-        return
+const Timer = ({ todos, timerComplited }) => {
+  const [[m, s], setTime] = useState([0, 0])
+  const [startedTimer, setStartedTimer] = useState(false)
+  const [finished, setFinished] = useState(false)
+
+  const intervalRef = useRef(null)
+
+  const startTimer = () => {
+    if (s === 0) {
+      if (m === 0) {
+        setFinished(true)
+        timerComplited()
+      } else {
+        setTime([m - 1, 59])
       }
-      this.setState({ startedTimer: true })
-
-      this.timer = setInterval(() => {
-        const { taskMin, taskSec } = this.state
-        let minLeft = taskMin
-        let secLeft = taskSec
-
-        if (finished) {
-          this.props.timerComplited()
-        }
-
-        if (secLeft === 0) {
-          if (minLeft === 0) {
-            clearInterval(this.timer)
-            this.setState({ startedTimer: false, finished: true })
-            this.props.timerComplited()
-          } else {
-            minLeft -= 1
-            secLeft = 59
-          }
-        } else {
-          secLeft -= 1
-        }
-
-        this.setState({ taskMin: minLeft, taskSec: secLeft })
-      }, 1000)
-    }
-    this.pauseTimer = () => {
-      this.setState({ startedTimer: false })
-      clearInterval(this.timer)
+    } else {
+      setTime([m, s - 1])
     }
   }
 
-  componentDidMount() {
-    this.setState({ taskMin: this.props.todo.timer.min, taskSec: this.props.todo.timer.sec })
+  const started = () => {
+    setStartedTimer(true)
   }
 
-  componentWillUnmount() {
-    clearInterval(this.timer)
+  const pauseTimer = () => {
+    setStartedTimer(false)
   }
 
-  render() {
-    const { startedTimer, taskMin, taskSec } = this.state
-    return (
-      <span className="description">
-        <button
-          type="button"
-          className={`icon icon-play ${startedTimer ? 'started' : null}`}
-          aria-label="play"
-          onClick={this.startTimer}
-        />
-        <button type="button" className="icon icon-pause" aria-label="pause" onClick={this.pauseTimer} />
-        <span className="timer-text">
-          {`${taskMin.toString().padStart(2, '0')}:${taskSec.toString().padStart(2, '0')}`}
-        </span>
-      </span>
-    )
-  }
+  useEffect(() => {
+    if (!startedTimer) return clearInterval(intervalRef.current)
+
+    if (finished) {
+      clearInterval(intervalRef.current)
+      setStartedTimer(false)
+      return timerComplited(todos.id)
+    }
+
+    intervalRef.current = setInterval(startTimer, 1000)
+
+    return () => clearInterval(intervalRef.current)
+  }, [startedTimer, m, s, finished])
+
+  useEffect(() => {
+    setTime([todos.timer.min, todos.timer.sec])
+  }, [])
+
+  return (
+    <span className="description">
+      <button
+        type="button"
+        className={`icon icon-play ${startedTimer ? 'started' : null}`}
+        aria-label="play"
+        onClick={started}
+      />
+      <button type="button" className="icon icon-pause" aria-label="pause" onClick={pauseTimer} />
+      <span className="timer-text">{`${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`}</span>
+    </span>
+  )
 }
+
+export default Timer
