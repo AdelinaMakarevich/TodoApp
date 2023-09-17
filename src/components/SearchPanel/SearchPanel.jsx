@@ -1,29 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import './SearchPanel.scss'
 
-class SearchPanel extends React.Component {
-  constructor() {
-    super()
-    this.keyCheck = (event) => {
-      if (event.keyCode == 13 && event.target.value != 0 && event.target.value != /^\s+$/) {
-        this.props.onAddition(event.target.value)
-        event.target.value = ''
-      }
-    }
+const SearchPanel = ({ onAddition }) => {
+  const [task, setTask] = useState()
+  const [min, setMin] = useState(0)
+  const [sec, setSec] = useState(0)
+  const getTask = (event) => {
+    setTask(event.target.value)
   }
-  render() {
-    return (
-      <input
-        type="text"
-        className="NewTodo"
-        placeholder="What needs to be done?"
-        autoFocus
-        onKeyUp={this.keyCheck}
-        required
-      />
-    )
+
+  const getMin = (event) => {
+    setMin(event.target.value)
   }
+  const getSec = (event) => {
+    setSec(event.target.value)
+  }
+  const submit = (event) => {
+    event.target.querySelector('.NewTodo').value = ''
+    event.preventDefault()
+    onAddition(task, min, sec)
+  }
+  return (
+    <form onSubmit={submit}>
+      <label className="HeaderConteiner">
+        <input
+          type="text"
+          className="NewTodo"
+          placeholder="What needs to be done?"
+          autoFocus
+          required
+          onChange={getTask}
+        />
+        <input type="number" min="0" placeholder="Min" className="TimerMin" onChange={getMin} />
+        <input type="number" min="0" max="59" placeholder="Sec" className="TimerSec" onChange={getSec} />
+      </label>
+      <input type="submit" style={{ display: 'none' }} />
+    </form>
+  )
 }
 
 export default SearchPanel
