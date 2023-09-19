@@ -11,22 +11,23 @@ class App extends Component {
     super()
     this.filterTodos = (value) => {
       let items = [...document.querySelectorAll('.TodoListItem')]
+      this.setState({ filter: value })
 
       switch (value) {
-        case 'all':
+        case 'All':
           items.forEach((todo) => {
             todo.style.display = ''
           })
           break
 
-        case 'active':
+        case 'Active':
           items.forEach((todo) => (todo.style.display = ''))
           items
             .filter((todo) => todo.querySelector('.Description').classList == 'Description Done')
             .forEach((todo) => (todo.style.display = 'none'))
           break
 
-        case 'completed':
+        case 'Completed':
           items.forEach((todo) => (todo.style.display = ''))
           items
             .filter((todo) => todo.querySelector('.Description').classList == 'Description')
@@ -58,6 +59,7 @@ class App extends Component {
           timer: { min: 1, sec: 10 },
         },
       ],
+      filter: 'All',
     }
     this.newTask = (task, min, sec) => {
       this.setState(({ todoData }) => {
@@ -76,6 +78,7 @@ class App extends Component {
     }
 
     this.doneTask = (id) => {
+      console.log(this.state.filter)
       this.setState(({ todoData }) => {
         let index = todoData.findIndex((e) => e.id === id)
         let deal = todoData[index]
@@ -83,6 +86,9 @@ class App extends Component {
         let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
         return { todoData: newTodoData }
       })
+      setTimeout(() => {
+        this.filterTodos(this.state.filter)
+      }, 1000)
     }
 
     this.deletedItem = (id) => {
@@ -108,22 +114,24 @@ class App extends Component {
 
     this.editItemPanel = (id, target) => {
       const index = this.state.todoData.findIndex((e) => e.id === id)
-      const editItem = this.state.todoData[index]
-      const input = document.createElement('input')
-      input.value = editItem.label
-      input.className = 'Edit'
-      let context = this
-      input.onkeyup = function (event) {
-        if (event.keyCode == 13 && event.target.value != 0 && event.target.value != /^\s+$/) {
-          editItem.label = input.value
-          editItem.date = new Date()
-          context.editItem(index, editItem)
-          input.remove()
-          target.classList.toggle('View')
+      if (!this.state.todoData[index].done) {
+        const editItem = this.state.todoData[index]
+        const input = document.createElement('input')
+        input.value = editItem.label
+        input.className = 'Edit'
+        let context = this
+        input.onkeyup = function (event) {
+          if (event.keyCode == 13 && event.target.value != 0 && event.target.value != /^\s+$/) {
+            editItem.label = input.value
+            editItem.date = new Date()
+            context.editItem(index, editItem)
+            input.remove()
+            target.classList.toggle('View')
+          }
         }
+        target.after(input)
+        target.classList.toggle('View')
       }
-      target.after(input)
-      target.classList.toggle('View')
     }
 
     this.editItem = (index, item) => {

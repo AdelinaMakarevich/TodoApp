@@ -13,6 +13,11 @@ class ItemStatusFilter extends React.Component {
     }
   }
   render() {
+    const button = [
+      { name: 'All', id: 1 },
+      { name: 'Active', id: 2 },
+      { name: 'Completed', id: 3 },
+    ]
     return (
       <footer className="Footer">
         <span className="TodoCount">
@@ -24,21 +29,19 @@ class ItemStatusFilter extends React.Component {
           }, 0)}
         </span>
         <ul className="Filters">
-          <li>
-            <button type="button" onClick={() => this.filter('all')}>
-              All
-            </button>
-          </li>
-          <li>
-            <button type="button" onClick={() => this.filter('active')}>
-              Active
-            </button>
-          </li>
-          <li>
-            <button type="button" onClick={() => this.filter('completed')}>
-              Completed
-            </button>
-          </li>
+          {button.map((item) => {
+            return (
+              <li key={item.id}>
+                <button
+                  onClick={() => {
+                    this.filter(item.name)
+                  }}
+                >
+                  {item.name}
+                </button>
+              </li>
+            )
+          })}
         </ul>
         <button type="button" className="ClearCompleted" onClick={this.delete}>
           Clear completed
