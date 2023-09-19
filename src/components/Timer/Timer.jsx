@@ -5,20 +5,32 @@ import './Timer.scss'
 const Timer = ({ todos, timerComplited }) => {
   const [[m, s], setTime] = useState([0, 0])
   const [startedTimer, setStartedTimer] = useState(false)
-  const [finished, setFinished] = useState(false)
+  const [finished, setFinished] = useState(todos.done)
 
   const intervalRef = useRef(null)
 
-  const startTimer = () => {
-    if (s === 0) {
-      if (m === 0) {
-        setFinished(true)
-        timerComplited()
+  let startTimer
+
+  if (todos.timer.sec > 0 || todos.timer.min > 0) {
+    startTimer = () => {
+      if (s === 0) {
+        if (m === 0) {
+          setFinished(true)
+          timerComplited()
+        } else {
+          setTime([m - 1, 59])
+        }
       } else {
-        setTime([m - 1, 59])
+        setTime([m, s - 1])
       }
-    } else {
-      setTime([m, s - 1])
+    }
+  } else {
+    startTimer = () => {
+      if (s === 59) {
+        setTime([m + 1, 0])
+      } else {
+        setTime([m, s + 1])
+      }
     }
   }
 
@@ -32,7 +44,10 @@ const Timer = ({ todos, timerComplited }) => {
 
   useEffect(() => {
     if (!startedTimer) return clearInterval(intervalRef.current)
-
+    if (todos.done) {
+      clearInterval(intervalRef.current)
+      setStartedTimer(false)
+    }
     if (finished) {
       clearInterval(intervalRef.current)
       setStartedTimer(false)

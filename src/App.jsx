@@ -31,25 +31,26 @@ const App = () => {
     },
   ]
   const [todoData, setTodoData] = useState(data)
+  const [filter, setFilter] = useState('All')
 
   const filterTodos = (value) => {
     let items = [...document.querySelectorAll('.TodoListItem')]
-
+    setFilter(() => value)
     switch (value) {
-      case 'all':
+      case 'All':
         items.forEach((todo) => {
           todo.style.display = ''
         })
         break
 
-      case 'active':
+      case 'Active':
         items.forEach((todo) => (todo.style.display = ''))
         items
           .filter((todo) => todo.querySelector('.Description').classList == 'Description Done')
           .forEach((todo) => (todo.style.display = 'none'))
         break
 
-      case 'completed':
+      case 'Completed':
         items.forEach((todo) => (todo.style.display = ''))
         items
           .filter((todo) => todo.querySelector('.Description').classList == 'Description')
@@ -77,6 +78,9 @@ const App = () => {
     deal.done = !deal.done
     let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
     setTodoData(() => newTodoData)
+    setTimeout(() => {
+      filterTodos(filter)
+    }, 1000)
   }
 
   const deletedItem = (id) => {
@@ -94,21 +98,23 @@ const App = () => {
 
   const editItemPanel = (id, target) => {
     const index = todoData.findIndex((e) => e.id === id)
-    const edit = todoData[index]
-    const input = document.createElement('input')
-    input.value = edit.label
-    input.className = 'Edit'
-    input.onkeyup = function (event) {
-      if (event.keyCode == 13 && event.target.value != 0 && event.target.value != /^\s+$/) {
-        edit.label = input.value
-        edit.date = new Date()
-        editItem(index, edit)
-        input.remove()
-        target.classList.toggle('View')
+    if (!todoData[index].done) {
+      const edit = todoData[index]
+      const input = document.createElement('input')
+      input.value = edit.label
+      input.className = 'Edit'
+      input.onkeyup = function (event) {
+        if (event.keyCode == 13 && event.target.value != 0 && event.target.value != /^\s+$/) {
+          edit.label = input.value
+          edit.date = new Date()
+          editItem(index, edit)
+          input.remove()
+          target.classList.toggle('View')
+        }
       }
+      target.after(input)
+      target.classList.toggle('View')
     }
-    target.after(input)
-    target.classList.toggle('View')
   }
 
   const editItem = (index, item) => {
