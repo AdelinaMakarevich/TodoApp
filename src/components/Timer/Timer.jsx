@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
 
 import './Timer.scss'
 
@@ -75,6 +76,11 @@ const Timer = ({ todos, timerComplited }) => {
       <span className="timer-text">{`${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`}</span>
     </span>
   )
+}
+
+Timer.propTypes = {
+  todos: PropTypes.object.isRequired,
+  timerComplited: PropTypes.func.isRequired,
 }
 
 export default Timer

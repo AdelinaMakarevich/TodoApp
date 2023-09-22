@@ -1,13 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import './ItemStatusFilter.scss'
 
-const ItemStatusFilter = ({ todos, dataFilter, onDeleted }) => {
+const ItemStatusFilter = ({ todos, dataFilter, allDelete }) => {
   const filter = (value) => {
     dataFilter(value)
   }
   const deleted = () => {
-    onDeleted('done')
+    allDelete()
   }
   const button = [
     { name: 'All', id: 1 },
@@ -44,6 +45,12 @@ const ItemStatusFilter = ({ todos, dataFilter, onDeleted }) => {
       </button>
     </footer>
   )
+}
+
+ItemStatusFilter.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dataFilter: PropTypes.func.isRequired,
+  allDelete: PropTypes.func.isRequired,
 }
 
 export default ItemStatusFilter

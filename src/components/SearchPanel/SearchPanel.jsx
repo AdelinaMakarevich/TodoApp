@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 import './SearchPanel.scss'
 
@@ -38,6 +39,10 @@ const SearchPanel = ({ onAddition }) => {
       <input type="submit" style={{ display: 'none' }} />
     </form>
   )
+}
+
+SearchPanel.propTypes = {
+  onAddition: PropTypes.func.isRequired,
 }
 
 export default SearchPanel

@@ -33,34 +33,27 @@ const App = () => {
   const [todoData, setTodoData] = useState(data)
   const [filter, setFilter] = useState('All')
 
-  const filterTodos = (value) => {
-    let items = [...document.querySelectorAll('.TodoListItem')]
-    setFilter(() => value)
-    switch (value) {
+  const filters = () => {
+    switch (filter) {
       case 'All':
-        items.forEach((todo) => {
-          todo.style.display = ''
-        })
-        break
+        return todoData
 
       case 'Active':
-        items.forEach((todo) => (todo.style.display = ''))
-        items
-          .filter((todo) => todo.querySelector('.Description').classList == 'Description Done')
-          .forEach((todo) => (todo.style.display = 'none'))
-        break
-
+        return todoData.filter((todo) => {
+          return !todo.done
+        })
       case 'Completed':
-        items.forEach((todo) => (todo.style.display = ''))
-        items
-          .filter((todo) => todo.querySelector('.Description').classList == 'Description')
-          .forEach((todo) => (todo.style.display = 'none'))
-        break
+        return todoData.filter((todo) => {
+          return todo.done
+        })
     }
   }
 
-  const newTask = (task, min, sec) => {
-    let id = todoData.at(-1).id + 1
+  const filterTodos = (value) => {
+    setFilter(() => value)
+  }
+
+  const newTask = (task, min, sec, id = todoData.at(-1).id + 1) => {
     let now = new Date()
     let newTask = {
       label: task,
@@ -73,61 +66,36 @@ const App = () => {
   }
 
   const doneTask = (id) => {
-    let index = todoData.findIndex((e) => e.id === id)
-    let deal = todoData[index]
-    deal.done = !deal.done
-    let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
+    let newTodoData = todoData.map((item) => {
+      if (item.id == id) {
+        item.done = !item.done
+      }
+      return item
+    })
     setTodoData(() => newTodoData)
-    setTimeout(() => {
-      filterTodos(filter)
-    }, 1000)
   }
 
   const deletedItem = (id) => {
-    if (id === 'done') {
-      const newTodoData = todoData.filter((data) => !data.done)
-
-      setTodoData(() => newTodoData)
-    } else {
-      const index = todoData.findIndex((e) => e.id === id)
-      let newTodoData = [...todoData.slice(0, index), ...todoData.slice(index + 1)]
-
-      setTodoData(() => newTodoData)
-    }
+    let newTodoData = todoData.filter((item) => {
+      return item.id !== id
+    })
+    setTodoData(() => newTodoData)
   }
 
-  const editItemPanel = (id, target) => {
-    const index = todoData.findIndex((e) => e.id === id)
-    if (!todoData[index].done) {
-      const edit = todoData[index]
-      const input = document.createElement('input')
-      input.value = edit.label
-      input.className = 'Edit'
-      input.onkeyup = function (event) {
-        if (event.keyCode == 13 && event.target.value != 0 && event.target.value != /^\s+$/) {
-          edit.label = input.value
-          edit.date = new Date()
-          editItem(index, edit)
-          input.remove()
-          target.classList.toggle('View')
-        }
-      }
-      target.after(input)
-      target.classList.toggle('View')
-    }
-  }
-
-  const editItem = (index, item) => {
-    let newTodoData = [...todoData.slice(0, index), item, ...todoData.slice(index + 1)]
-
+  const allDelete = () => {
+    let newTodoData = todoData.filter((item) => {
+      return !item.done
+    })
     setTodoData(() => newTodoData)
   }
 
   const timerComplited = (id) => {
-    let index = todoData.findIndex((e) => e.id === id)
-    let deal = todoData[index]
-    deal.done = !deal.done
-    let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
+    let newTodoData = this.state.todoData.map((item) => {
+      if (item.id == id) {
+        item.done = !item.done
+      }
+      return item
+    })
     setTodoData(() => newTodoData)
   }
 
@@ -139,14 +107,14 @@ const App = () => {
       </header>
       <section className="AppMain">
         <TodoList
-          todos={todoData}
+          todos={filters()}
           onDone={doneTask}
           onDeleted={deletedItem}
-          onEdition={editItemPanel}
           timerComplited={timerComplited}
+          onAddition={newTask}
         />
       </section>
-      <ItemStatusFilter todos={todoData} dataFilter={filterTodos} onDeleted={deletedItem} />
+      <ItemStatusFilter todos={todoData} dataFilter={filterTodos} onDeleted={deletedItem} allDelete={allDelete} />
     </section>
   )
 }
