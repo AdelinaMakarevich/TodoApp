@@ -4,7 +4,7 @@ import './TodoList.scss'
 
 import TodoListItem from '../TodoListItem'
 
-const TodoList = ({ todos, onDone, onDeleted, onEdition, timerComplited }) => {
+const TodoList = ({ todos, onDone, onDeleted, onEdition, timerComplited, onAddition }) => {
   const element = todos.map((item) => {
     const { id, ...itemProps } = item
 
@@ -16,6 +16,7 @@ const TodoList = ({ todos, onDone, onDeleted, onEdition, timerComplited }) => {
           onDone={() => onDone(id)}
           onEdition={(target) => onEdition(id, target)}
           timerComplited={() => timerComplited(id)}
+          onAddition={onAddition}
         />
       </li>
     )

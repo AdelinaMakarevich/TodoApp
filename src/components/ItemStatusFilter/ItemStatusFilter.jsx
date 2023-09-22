@@ -9,7 +9,7 @@ class ItemStatusFilter extends React.Component {
       this.props.dataFilter(value)
     }
     this.delete = () => {
-      this.props.onDeleted('done')
+      this.props.allDelete()
     }
   }
   render() {

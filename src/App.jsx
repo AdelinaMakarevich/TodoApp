@@ -9,32 +9,6 @@ import './App.scss'
 class App extends Component {
   constructor() {
     super()
-    this.filterTodos = (value) => {
-      let items = [...document.querySelectorAll('.TodoListItem')]
-      this.setState({ filter: value })
-
-      switch (value) {
-        case 'All':
-          items.forEach((todo) => {
-            todo.style.display = ''
-          })
-          break
-
-        case 'Active':
-          items.forEach((todo) => (todo.style.display = ''))
-          items
-            .filter((todo) => todo.querySelector('.Description').classList == 'Description Done')
-            .forEach((todo) => (todo.style.display = 'none'))
-          break
-
-        case 'Completed':
-          items.forEach((todo) => (todo.style.display = ''))
-          items
-            .filter((todo) => todo.querySelector('.Description').classList == 'Description')
-            .forEach((todo) => (todo.style.display = 'none'))
-          break
-      }
-    }
     this.state = {
       todoData: [
         {
@@ -61,9 +35,29 @@ class App extends Component {
       ],
       filter: 'All',
     }
-    this.newTask = (task, min, sec) => {
+
+    this.filter = () => {
+      switch (this.state.filter) {
+        case 'All':
+          return this.state.todoData
+
+        case 'Active':
+          return this.state.todoData.filter((todo) => {
+            return !todo.done
+          })
+        case 'Completed':
+          return this.state.todoData.filter((todo) => {
+            return todo.done
+          })
+      }
+    }
+
+    this.filterTodos = (value) => {
+      this.setState({ filter: value })
+    }
+
+    this.newTask = (task, min, sec, id = this.state.todoData.at(-1).id + 1) => {
       this.setState(({ todoData }) => {
-        let id = todoData.at(-1).id + 1
         let now = new Date()
         let newTask = {
           label: task,
@@ -78,80 +72,37 @@ class App extends Component {
     }
 
     this.doneTask = (id) => {
-      console.log(this.state.filter)
-      this.setState(({ todoData }) => {
-        let index = todoData.findIndex((e) => e.id === id)
-        let deal = todoData[index]
-        deal.done = !deal.done
-        let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
-        return { todoData: newTodoData }
+      let newTodoData = this.state.todoData.map((item) => {
+        if (item.id == id) {
+          item.done = !item.done
+        }
+        return item
       })
-      setTimeout(() => {
-        this.filterTodos(this.state.filter)
-      }, 1000)
+      this.setState({ todoData: newTodoData })
     }
 
     this.deletedItem = (id) => {
-      if (id === 'done') {
-        this.setState(({ todoData }) => {
-          const newTodoData = todoData.filter((data) => !data.done)
-
-          return {
-            todoData: newTodoData,
-          }
-        })
-      } else {
-        this.setState(({ todoData }) => {
-          const index = todoData.findIndex((e) => e.id === id)
-          let newTodoData = [...todoData.slice(0, index), ...todoData.slice(index + 1)]
-
-          return {
-            todoData: newTodoData,
-          }
-        })
-      }
-    }
-
-    this.editItemPanel = (id, target) => {
-      const index = this.state.todoData.findIndex((e) => e.id === id)
-      if (!this.state.todoData[index].done) {
-        const editItem = this.state.todoData[index]
-        const input = document.createElement('input')
-        input.value = editItem.label
-        input.className = 'Edit'
-        let context = this
-        input.onkeyup = function (event) {
-          if (event.keyCode == 13 && event.target.value != 0 && event.target.value != /^\s+$/) {
-            editItem.label = input.value
-            editItem.date = new Date()
-            context.editItem(index, editItem)
-            input.remove()
-            target.classList.toggle('View')
-          }
-        }
-        target.after(input)
-        target.classList.toggle('View')
-      }
-    }
-
-    this.editItem = (index, item) => {
-      this.setState(({ todoData }) => {
-        let newTodoData = [...todoData.slice(0, index), item, ...todoData.slice(index + 1)]
-
-        return {
-          todoData: newTodoData,
-        }
+      let newTodoData = this.state.todoData.filter((item) => {
+        return item.id !== id
       })
+      this.setState({ todoData: newTodoData })
+    }
+
+    this.allDelete = () => {
+      let newTodoData = this.state.todoData.filter((item) => {
+        return !item.done
+      })
+      this.setState({ todoData: newTodoData })
     }
 
     this.timerComplited = (id) => {
-      this.setState(({ todoData }) => {
-        let index = todoData.findIndex((e) => e.id === id)
-        let deal = todoData[index]
-        deal.done = !deal.done
-        let newTodoData = [...todoData.slice(0, index), deal, ...todoData.slice(index + 1)]
-        return { todoData: newTodoData }
+      let newTodoData = this.state.todoData.map((item) => {
+        if (item.id == id) {
+          item.done = !item.done
+        }
+        return item
       })
+      this.setState({ todoData: newTodoData })
     }
   }
 
@@ -164,14 +115,20 @@ class App extends Component {
         </header>
         <section className="AppMain">
           <TodoList
-            todos={this.state.todoData}
+            todos={this.filter()}
             onDone={this.doneTask}
             onDeleted={this.deletedItem}
             onEdition={this.editItemPanel}
             timerComplited={this.timerComplited}
+            onAddition={this.newTask}
           />
         </section>
-        <ItemStatusFilter todos={this.state.todoData} dataFilter={this.filterTodos} onDeleted={this.deletedItem} />
+        <ItemStatusFilter
+          todos={this.state.todoData}
+          dataFilter={this.filterTodos}
+          onDeleted={this.deletedItem}
+          allDelete={this.allDelete}
+        />
       </section>
     )
   }
