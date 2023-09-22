@@ -1,2 +1,2 @@
 # Todo App
-app link in Vercel (https://todoapp-adelinamakarevich.vercel.app/)
+app link in Vercel (https://todo-steel-theta.vercel.app/)
